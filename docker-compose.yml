@@ -2,19 +2,18 @@ version: "3.7"
 services:
 
   redis:
-    image: "redis:alpine"
+    image: redis:alpine
     ports:
       - "6379:6379"
 
   mongodb:
     image: mongo:latest
+    restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: pass
+      MONGO_INITDB_ROOT_PASSWORD: example
     ports:
-      - 27017:27017
-    volumes:
-      - mongodb_data_container:/data/db
+      - "27017:27017"
 
 volumes:
   mongodb_data_container:
