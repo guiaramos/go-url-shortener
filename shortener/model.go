@@ -1,4 +1,4 @@
-package shotener
+package shortener
 
 // Redirect is a schema for redirect
 type Redirect struct {
