@@ -55,12 +55,12 @@ func newMongoClient(url string, timeout int) (*mongo.Client, error) {
 func (r *mongoRepository) Find(code string) (*shortener.Redirect, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), r.timeout)
 	defer cancel()
+	coll := r.client.Database(r.database).Collection("redirects")
 
 	redirect := &shortener.Redirect{}
 	filter := bson.M{"code": code}
-	collection := r.client.Database(r.database).Collection("redirects")
 
-	err := collection.FindOne(ctx, filter).Decode(&redirect)
+	err := coll.FindOne(ctx, filter).Decode(&redirect)
 
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
@@ -76,9 +76,9 @@ func (r *mongoRepository) Store(redirect *shortener.Redirect) error {
 	ctx, cancel := context.WithTimeout(context.Background(), r.timeout)
 	defer cancel()
 
-	collection := r.client.Database(r.database).Collection("redirects")
+	coll := r.client.Database(r.database).Collection("redirects")
 
-	_, err := collection.InsertOne(
+	_, err := coll.InsertOne(
 		ctx,
 		bson.M{
 			"code":       redirect.Code,
